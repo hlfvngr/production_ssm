@@ -8,6 +8,18 @@
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="revise_time" jdbcType="TIMESTAMP" property="reviseTime" />
   </resultMap>
+
+  <resultMap id="ResultMap" type="com.cskaoyan.erp.bean.VO.TechnologyRequirementVO">
+    <id column="technology_requirement_id" jdbcType="VARCHAR" property="technologyRequirementId" />
+    <result column="technology_id" jdbcType="VARCHAR" property="technologyId" />
+    <result column="requirement" jdbcType="VARCHAR" property="requirement" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="revise_time" jdbcType="TIMESTAMP" property="reviseTime" />
+
+    <result column="technology_name" jdbcType="VARCHAR" property="technologyName"/>
+
+  </resultMap>
+
   <sql id="Base_Column_List">
     technology_requirement_id, technology_id, requirement, add_time, revise_time
   </sql>

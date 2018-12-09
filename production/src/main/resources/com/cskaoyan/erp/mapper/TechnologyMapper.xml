@@ -12,6 +12,8 @@
     <result column="double_capacity" jdbcType="INTEGER" property="doubleCapacity" />
     <result column="overfulfil_capacity" jdbcType="INTEGER" property="overfulfilCapacity" />
   </resultMap>
+
+
   <sql id="Base_Column_List">
     technology_id, technology_name, price, vital_process_period, standard_capacity, overtime_standard_capacity, 
     overtime_overfulfil_capacity, double_capacity, overfulfil_capacity
