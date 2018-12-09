@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.erp.mapper.ManufactureMapper">
+
+  <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Manufacture">
+
+    <id column="manufacture_sn" jdbcType="VARCHAR" property="manufactureSn" />
+    <result column="launch_quantity" jdbcType="INTEGER" property="launchQuantity" />
+    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+
+    <association property="order" javaType="com.cskaoyan.erp.bean.Order">
+      <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+      <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
+      <result column="request_date" jdbcType="TIMESTAMP" property="requestDate" />
+      <result column="note" jdbcType="VARCHAR" property="note" />
+      <result column="quantity" jdbcType="INTEGER" property="quantity" />
+      <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+      <result column="unit" jdbcType="VARCHAR" property="unit" />
+      <result column="image" jdbcType="VARCHAR" property="image" />
+      <result column="file" jdbcType="VARCHAR" property="file" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+      <association column="custom_id" property="orderCustom"
+                   select="com.cskaoyan.erp.mapper.CustomerMapper.selectByPrimaryKey"/>
+      <association column="product_id"  property="orderProduct"
+                   select="com.cskaoyan.erp.mapper.ProductMapper.selectByPrimaryKey"/>
+    </association>
+
+    <association property="technology" javaType="com.cskaoyan.erp.bean.Technology">
+      <id column="technology_id" jdbcType="VARCHAR" property="technologyId" />
+      <result column="technology_name" jdbcType="VARCHAR" property="technologyName" />
+      <result column="price" jdbcType="DECIMAL" property="price" />
+      <result column="vital_process_period" jdbcType="VARCHAR" property="vitalProcessPeriod" />
+      <result column="standard_capacity" jdbcType="INTEGER" property="standardCapacity" />
+      <result column="overtime_standard_capacity" jdbcType="INTEGER" property="overtimeStandardCapacity" />
+      <result column="overtime_overfulfil_capacity" jdbcType="INTEGER" property="overtimeOverfulfilCapacity" />
+      <result column="double_capacity" jdbcType="INTEGER" property="doubleCapacity" />
+      <result column="overfulfil_capacity" jdbcType="INTEGER" property="overfulfilCapacity" />
+    </association>
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    manufacture_sn, order_id, technology_id, launch_quantity, begin_date, end_date
+  </sql>
+  <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Manufacture">
+    insert into manufacture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="manufactureSn != null">
+        manufacture_sn,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="technologyId != null">
+        technology_id,
+      </if>
+      <if test="launchQuantity != null">
+        launch_quantity,
+      </if>
+      <if test="beginDate != null">
+        begin_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="manufactureSn != null">
+        #{manufactureSn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="technologyId != null">
+        #{technologyId,jdbcType=VARCHAR},
+      </if>
+      <if test="launchQuantity != null">
+        #{launchQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="beginDate != null">
+        #{beginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Manufacture">
+    update manufacture
+    <set>
+      <if test="order != null">
+        order_id = #{order.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="technology != null">
+        technology_id = #{technology.technologyId,jdbcType=VARCHAR},
+      </if>
+      <if test="launchQuantity != null">
+        launch_quantity = #{launchQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="beginDate != null">
+        begin_date = #{beginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where manufacture_sn = #{manufactureSn,jdbcType=VARCHAR}
+  </update>
+
+  <insert id="insert">
+        insert into manufacture
+        (manufacture_sn, order_id, technology_id, launch_quantity, begin_date, end_date)
+        values (#{manufactureSn,jdbcType=VARCHAR}, #{order.orderId,jdbcType=VARCHAR},
+        #{technology.technologyId,jdbcType=VARCHAR}, #{launchQuantity,jdbcType=INTEGER},
+        #{beginDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP})
+  </insert>
+
+  <select id="count" resultType="_int">
+     select count(*) from manufacture
+     <where>
+        <if test="manufactureSn != null and manufactureSn != '' ">
+          and manufacture_sn = #{manufactureSn}
+        </if>
+       <if test="order != null">
+         and order_id = #{order.orderId}
+       </if>
+       <if test="technology != null">
+        and technology_id = #{technology.technologyId}
+       </if>
+     </where>
+  </select>
+
+  <sql id="join">
+      m.manufacture_sn, m.order_id, m.technology_id, m.launch_quantity, m.begin_date, m.end_date,
+     o.order_id, o.custom_id, o.product_id, o.order_date, o.request_date, o.note, o.quantity, o.unit_price,
+     o.unit, o.image, o.file, o.status,
+     t.technology_id, t.technology_name, t.price, t.vital_process_period, t.standard_capacity, t.overtime_standard_capacity,
+     t.overtime_overfulfil_capacity, t.double_capacity, t.overfulfil_capacity
+     from manufacture m left join c_order o on  m.order_id = o.order_id
+     left join technology t on m.technology_id = t.technology_id
+  </sql>
+
+  <select id="selectByPage" resultMap="BaseResultMap">
+     select <include refid="join"/>
+     <where>
+       <if test="manufactureSn != null and manufactureSn != '' ">
+         and m.manufacture_sn = #{manufactureSn}
+       </if>
+       <if test="order != null">
+         and m.order_id = #{order.orderId}
+       </if>
+       <if test="technology != null">
+         and m.technology_id = #{technology.technologyId}
+       </if>
+     </where>
+         limit #{limit} offset #{offset};
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select <include refid="join"/> where manufacture_sn = #{manufactureSn};
+  </select>
+
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.erp.mapper.WorkMapper">
+
+  <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Work">
+    <id column="work_id" jdbcType="VARCHAR" property="workId" />
+    <result column="process_number" jdbcType="VARCHAR" property="processNumber" />
+    <result column="rating" jdbcType="INTEGER" property="rating" />
+
+    <association  property="workProduct" javaType="com.cskaoyan.erp.bean.Product">
+      <id column="product_id" jdbcType="VARCHAR" property="productId" />
+      <result column="product_name" jdbcType="VARCHAR" property="productName" />
+      <result column="product_type" jdbcType="VARCHAR" property="productType" />
+      <result column="image" jdbcType="VARCHAR" property="image" />
+      <result column="note" jdbcType="VARCHAR" property="note" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+    </association>
+
+    <association  property="workProcess" javaType="com.cskaoyan.erp.bean.Process">
+      <id column="process_id" jdbcType="VARCHAR" property="processId" />
+      <result column="sequence" jdbcType="INTEGER" property="sequence" />
+      <result column="quota" jdbcType="INTEGER" property="quota" />
+      <association column="technology_plan_id" property="technologyPlan"
+                   select="com.cskaoyan.erp.mapper.TechnologyPlanMapper.selectByPrimaryKey"/>
+    </association>
+
+    <association  property="workDevice" javaType="com.cskaoyan.erp.bean.Device">
+      <id column="device_id" jdbcType="VARCHAR" property="deviceId" />
+      <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+      <result column="device_status_id" jdbcType="VARCHAR" property="deviceStatusId" />
+      <result column="device_status" jdbcType="VARCHAR" property="deviceStatus" />
+      <result column="device_purchase_date" jdbcType="TIMESTAMP" property="devicePurchaseDate" />
+      <result column="device_purchase_price" jdbcType="DECIMAL" property="devicePurchasePrice" />
+      <result column="device_manufacture_date" jdbcType="TIMESTAMP" property="deviceManufactureDate" />
+      <result column="device_service_life" jdbcType="TIMESTAMP" property="deviceServiceLife" />
+      <result column="device_keeper_id" jdbcType="VARCHAR" property="deviceKeeperId" />
+      <result column="note" jdbcType="VARCHAR" property="note" />
+      <association column="device_type_id"  property="deviceType"
+                   select="com.cskaoyan.erp.mapper.DeviceTypeMapper.selectByPrimaryKey"/>
+    </association>
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    work_id, process_number, product_id, process_id, device_id, rating
+  </sql>
+  <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Work">
+    insert into work
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workId != null">
+        work_id,
+      </if>
+      <if test="processNumber != null">
+        process_number,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="processId != null">
+        process_id,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="rating != null">
+        rating,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workId != null">
+        #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="processNumber != null">
+        #{processNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="processId != null">
+        #{processId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="rating != null">
+        #{rating,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Work">
+    update work
+    <set>
+      <if test="processNumber != null and processNumber != ''">
+        process_number = #{processNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="workProduct != null">
+        product_id = #{workProduct.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="workProcess != null">
+        process_id = #{workProcess.processId,jdbcType=VARCHAR},
+      </if>
+      <if test="workDevice != null">
+        device_id = #{workDevice.deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="rating != null and rating != ''">
+        rating = #{rating,jdbcType=INTEGER},
+      </if>
+    </set>
+    where work_id = #{workId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="count" resultType="_int">
+     select count(*) from `work`
+     <where>
+        <if test="workId != null and workId != ''">
+             and work_id = #{workId}
+        </if>
+       <if test="workProduct != null">
+            and product_id = #{workProduct.productId}
+       </if>
+       <if test="workProcess != null">
+           and process_id = #{workProcess.processId}
+       </if>
+       <if test="workDevice != null">
+           and device_id = #{workDevice.deviceId}
+       </if>
+     </where>
+  </select>
+
+  <sql id="join">
+     w.work_id, w.process_number, w.product_id, w.process_id, w.device_id, w.rating,
+       pd.product_id, pd.product_name, pd.product_type, pd.image, pd.note, pd.`status`,
+       p.process_id, p.technology_plan_id, p.sequence, p.quota,
+       d.device_id, d.device_name, d.device_type_id, d.device_status_id, d.device_status, d.device_purchase_date,
+       d.device_purchase_price, d.device_manufacture_date, d.device_service_life, d.device_keeper_id, d.note
+       from `work` w left join product pd on w.product_id = pd.product_id
+      left join process p on w.process_id = p.process_id
+      left join device d on w.device_id = d.device_id
+  </sql>
+
+  <select id="selectByPage" resultMap="BaseResultMap">
+      select <include refid="join"/>
+      <where>
+        <if test="workId != null and workId != ''">
+          and w.work_id = #{workId}
+        </if>
+        <if test="workProduct != null">
+          and w.product_id = #{workProduct.productId}
+        </if>
+        <if test="workProcess != null">
+          and w.process_id = #{workProcess.processId}
+        </if>
+        <if test="workDevice != null">
+          and w.device_id = #{workDevice.deviceId}
+        </if>
+      </where>
+      limit #{limit} offset #{offset};
+  </select>
+
+  <insert id="insert">
+        insert into work
+        (work_id, process_number,product_id,process_id,device_id, rating)
+        values (#{workId}, #{processNumber},#{workProduct.productId},
+         #{workProcess.processId},#{workDevice.deviceId}, #{rating})
+  </insert>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+      select <include refid="join"/> where work_id = #{workId,jdbcType=VARCHAR};
+  </select>
+
+  <select id="selectAllWork" resultMap="BaseResultMap">
+       select <include refid="join"/>;
+  </select>
+
+</mapper>
