@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.erp.mapper.DeviceMaintainMapper">
+
+  <select id="findPage" resultMap="MaintainMap">
+    select * from device_maintain limit #{limit} offset #{offset}
+  </select>
+
+  <select id="getTotalRecords" resultType="integer">
+    select count(*) from device_maintain
+  </select>
+
+  <resultMap id="MaintainMap" type="com.cskaoyan.erp.bean.vo.DeviceMaintainVo">
+    <id column="device_maintain_id" jdbcType="VARCHAR" property="deviceMaintainId" />
+    <result column="device_fault_id" jdbcType="VARCHAR" property="deviceFaultId" />
+    <result column="device_maintain_emp_id" jdbcType="VARCHAR" property="deviceMaintainEmpId" />
+    <result column="device_maintain_date" jdbcType="TIMESTAMP" property="deviceMaintainDate" />
+    <result column="device_maintain_result" jdbcType="VARCHAR" property="deviceMaintainResult" />
+    <result column="device_maintain_cost" jdbcType="DECIMAL" property="deviceMaintainCost" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <association property="deviceMaintainEmp" column="device_maintain_emp_id" select="com.cskaoyan.erp.mapper.EmployeeMapper.getEmp"></association>
+  </resultMap>
+
+  <resultMap id="MaintainConditionMap" type="com.cskaoyan.erp.bean.vo.DeviceMaintainVo">
+    <id column="device_maintain_id" jdbcType="VARCHAR" property="deviceMaintainId" />
+    <result column="device_fault_id" jdbcType="VARCHAR" property="deviceFaultId" />
+    <result column="device_maintain_date" jdbcType="TIMESTAMP" property="deviceMaintainDate" />
+    <result column="device_maintain_result" jdbcType="VARCHAR" property="deviceMaintainResult" />
+    <result column="device_maintain_cost" jdbcType="DECIMAL" property="deviceMaintainCost" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+
+
+
+  <select id="findPageByCondition" resultMap="MaintainConditionMap" >
+    select device_maintain_id, dm.device_fault_id, device_maintain_emp_id, device_maintain_date,
+    device_maintain_result, device_maintain_cost, note from device_maintain dm
+    left join device_fault df
+    on dm.device_fault_id=df.device_fault_id
+    <where>
+      <if test="deviceMaintain!=null">
+        <if test="deviceMaintain.deviceFaultId!=null and deviceMaintain.deviceFaultId!=''">
+          and dm.device_fault_id like "%"#{deviceMaintain.deviceFaultId}"%"
+        </if>
+        <if test="deviceMaintain.deviceMaintainId!=null and deviceMaintain.deviceMaintainId!=''">
+          and device_maintain_id like "%"#{deviceMaintain.deviceMaintainId}"%"
+        </if>
+      </if>
+      limit #{limit} offset #{offset}
+    </where>
+  </select>
+
+  <select id="getConditionCount" resultType="integer">
+    select count(*) from device_maintain dm
+    left join device_fault df
+    on dm.device_fault_id=df.device_fault_id
+    <where>
+      <if test="deviceMaintain!=null">
+        <if test="deviceMaintain.deviceFaultId!=null and deviceMaintain.deviceFaultId!=''">
+          and dm.device_fault_id like "%"#{deviceMaintain.deviceFaultId}"%"
+        </if>
+        <if test="deviceMaintain.deviceMaintainId!=null and deviceMaintain.deviceMaintainId!=''">
+          and device_maintain_id like "%"#{deviceMaintain.deviceMaintainId}"%"
+        </if>
+      </if>
+    </where>
+  </select>
+
   <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.DeviceMaintain">
     <id column="device_maintain_id" jdbcType="VARCHAR" property="deviceMaintainId" />
     <result column="device_fault_id" jdbcType="VARCHAR" property="deviceFaultId" />

@@ -1,8 +1,14 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.DeviceMaintain;
+import com.cskaoyan.erp.bean.vo.DeviceMaintainVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
+@Repository
 public interface DeviceMaintainMapper {
     @Delete({
         "delete from device_maintain",
@@ -47,4 +53,12 @@ public interface DeviceMaintainMapper {
         "where device_maintain_id = #{deviceMaintainId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(DeviceMaintain record);
+
+    Integer getTotalRecords();
+
+    List<DeviceMaintainVo> findPage(Map<String, Object> map);
+
+    Integer getConditionCount(Map<String, Object> map);
+
+    List<DeviceMaintainVo> findPageByCondition(Map<String, Object> map);
 }

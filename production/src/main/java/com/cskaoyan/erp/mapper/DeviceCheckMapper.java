@@ -1,8 +1,14 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.DeviceCheck;
+import com.cskaoyan.erp.bean.vo.DeviceCheckVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+import java.util.Map;
+
+@ResponseBody
 public interface DeviceCheckMapper {
     @Delete({
         "delete from device_check",
@@ -44,4 +50,12 @@ public interface DeviceCheckMapper {
         "where device_check_id = #{deviceCheckId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(DeviceCheck record);
+
+    Integer getTotalRecords();
+
+    List<DeviceCheckVo> findPage(Map<String, Object> map);
+
+    Integer getConditionCount(Map<String, Object> map);
+
+    List<DeviceCheckVo> findPageByCondition(Map<String, Object> map);
 }

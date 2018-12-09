@@ -2,7 +2,12 @@ package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.DeviceType;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
+@Repository
 public interface DeviceTypeMapper {
     @Delete({
         "delete from device_type",
@@ -48,4 +53,14 @@ public interface DeviceTypeMapper {
         "where device_type_id = #{deviceTypeId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(DeviceType record);
+
+    Integer getTotalRecords();
+
+    List<DeviceType> findPage(Map<String, Object> map);
+
+    Integer getConditionCount(Map<String, Object> map);
+
+    List<DeviceType> findPageByCondition(Map<String, Object> map);
+
+    List<DeviceType> getData();
 }

@@ -1,9 +1,19 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.Device;
+import com.cskaoyan.erp.bean.vo.DeviceVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
+@Repository
 public interface DeviceMapper {
+
+    List<DeviceVo> findPage(Map<String, Object> map);
+
+
     @Delete({
         "delete from device",
         "where device_id = #{deviceId,jdbcType=VARCHAR}"
@@ -19,9 +29,9 @@ public interface DeviceMapper {
         "note)",
         "values (#{deviceId,jdbcType=VARCHAR}, #{deviceName,jdbcType=VARCHAR}, ",
         "#{deviceTypeId,jdbcType=VARCHAR}, #{deviceStatusId,jdbcType=VARCHAR}, ",
-        "#{deviceStatus,jdbcType=VARCHAR}, #{devicePurchaseDate,jdbcType=TIMESTAMP}, ",
-        "#{devicePurchasePrice,jdbcType=DECIMAL}, #{deviceManufactureDate,jdbcType=TIMESTAMP}, ",
-        "#{deviceServiceLife,jdbcType=TIMESTAMP}, #{deviceKeeperId,jdbcType=VARCHAR}, ",
+        "#{deviceStatus,jdbcType=VARCHAR}, #{devicePurchaseDate}, ",
+        "#{devicePurchasePrice,jdbcType=DECIMAL}, #{deviceManufactureDate}, ",
+        "#{deviceServiceLife}, #{deviceKeeperId,jdbcType=VARCHAR}, ",
         "#{note,jdbcType=VARCHAR})"
     })
     int insert(Device record);
@@ -56,4 +66,14 @@ public interface DeviceMapper {
         "where device_id = #{deviceId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(Device record);
+
+
+    Integer getTotalRecords();
+
+    List<DeviceVo> findPageByCondition(Map<String, Object> map);
+
+    Integer getConditionCount(Map<String, Object> map);
+
+    List<Device> getData();
+
 }

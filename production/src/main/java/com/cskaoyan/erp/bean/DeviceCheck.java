@@ -5,7 +5,7 @@ import java.util.Date;
 public class DeviceCheck {
     private String deviceCheckId;
 
-    private String deviceId;
+    public String deviceId;
 
     private String deviceCheckEmpId;
 
@@ -28,7 +28,7 @@ public class DeviceCheck {
     }
 
     public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId == null ? null : deviceId.trim();
+        this.deviceId = deviceId;
     }
 
     public String getDeviceCheckEmpId() {
@@ -36,7 +36,7 @@ public class DeviceCheck {
     }
 
     public void setDeviceCheckEmpId(String deviceCheckEmpId) {
-        this.deviceCheckEmpId = deviceCheckEmpId == null ? null : deviceCheckEmpId.trim();
+        this.deviceCheckEmpId = deviceCheckEmpId;
     }
 
     public Date getDeviceCheckDate() {

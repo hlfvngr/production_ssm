@@ -1,8 +1,14 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.DeviceFault;
+import com.cskaoyan.erp.bean.vo.DeviceFaultVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
+@Repository
 public interface DeviceFaultMapper {
     @Delete({
         "delete from device_fault",
@@ -44,4 +50,14 @@ public interface DeviceFaultMapper {
         "where device_fault_id = #{deviceFaultId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(DeviceFault record);
+
+    Integer getTotalRecords();
+
+    List<DeviceFaultVo> findPage(Map<String, Object> map);
+
+    Integer getConditionCount(Map<String, Object> map);
+
+    List<DeviceFaultVo> findPageByCondition(Map<String, Object> map);
+
+    DeviceFault getData();
 }
