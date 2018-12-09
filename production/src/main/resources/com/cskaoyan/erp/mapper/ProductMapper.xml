@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.erp.mapper.ProductMapper">
+
+  <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Product">
+    <id column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_type" jdbcType="VARCHAR" property="productType" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+   <sql id="Base_Column_List">
+    product_id, product_name, product_type, image, note, `status`
+  </sql>
+
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.Product">
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="productType != null">
+        product_type,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Product">
+    update product
+    <set>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAllProduct" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List"/> from product;
+  </select>
+
+  <select id="count" resultType="_int">
+       select count(*) from product
+       <where>
+         <if test="productId != null and productId != ''">
+           and product_id like #{productId}
+         </if>
+         <if test="productName != null and productName != ''">
+           and product_name like "%"#{productName}"%"
+         </if>
+         <if test="productType != null and productType != ''">
+           and product_type like "%"#{productType}"%"
+         </if>
+       </where>
+  </select>
+
+  <select id="selectByPage"  resultMap="BaseResultMap">
+       select <include refid="Base_Column_List"/> from product
+    <where>
+      <if test="productId != null and productId != ''">
+        and product_id like #{productId}
+      </if>
+      <if test="productName != null and productName != ''">
+        and product_name like "%"#{productName}"%"
+      </if>
+      <if test="productType != null and productType != ''">
+        and product_type like "%"#{productType}"%"
+      </if>
+    </where>
+       limit #{limit} offset #{offset};
+  </select>
+
+</mapper>
