@@ -45,7 +45,7 @@
 <!-- Toolbar -->
 <div  id="toolbar_device" style=" height: 22px; padding: 3px 11px; background: #fafafa;">  
 	
-	<c:forEach items="${sessionScope.sysPermissionList}" var="per" > 
+	<%--<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
 		<c:if test="${per=='device:add'}">
 		    <div style="float: left;">  
 		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="device_add()">新增</a>  
@@ -61,9 +61,19 @@
 		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="device_delete()">删除</a>  
 		    </div>  
 		</c:if>
-	</c:forEach>
-	
-	<div class="datagrid-btn-separator"></div>  
+	</c:forEach>--%>
+
+		<div style="float: left;">
+			<a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="device_add()">新增</a>
+		</div>
+		<div style="float: left;">
+			<a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="device_edit()">编辑</a>
+		</div>
+		<div style="float: left;">
+			<a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="device_delete()">删除</a>
+		</div>
+
+		<div class="datagrid-btn-separator"></div>
 	
 	<div style="float: left;">  
 		<a href="#" class="easyui-linkbutton" plain="true" icon="icon-reload" onclick="device_reload()">刷新</a>  
@@ -379,7 +389,7 @@ function doSearch_device(value,name){ //用户输入用户名,点击搜素,触�
 	/* DeviceType Relative Object */ 
 	
 	//打开设备种类对话框
-	function  openDeviceType_deviceList(index){ 
+	function  openDeviceType_deviceList(index){
 		var row = onDeviceClickRow(index);
 		$("#deviceTypeInfo_deviceList").dialog({
     		onOpen :function(){
@@ -467,7 +477,7 @@ function doSearch_device(value,name){ //用户输入用户名,点击搜素,触�
 	};
 	
 	//提交设备保管人信息
-	function submitDeviceTypeEditForm_deviceList(){
+	/*function submitDeviceTypeEditForm_deviceList(){
 		$.get("deviceType/edit_judge",'',function(data){
     		if(data.msg != null){
     			$.messager.alert('提示', data.msg);
@@ -487,7 +497,7 @@ function doSearch_device(value,name){ //用户输入用户名,点击搜素,触�
     			});
     		}
     	});
-	}
+	}*/
 	/************************************ DeviceKeeper Relative Object ************************************/
 	
 	/************************************ NoteRelative Object ************************************/

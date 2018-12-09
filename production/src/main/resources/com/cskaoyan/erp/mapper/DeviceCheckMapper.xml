@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.erp.mapper.DeviceCheckMapper">
+
+  <select id="findPage" resultMap="DeviceCheckMap">
+    select * from device_check limit #{limit} offset #{offset}
+  </select>
+
+  <select id="getTotalRecords" resultType="integer">
+    select count(*) from device_check
+  </select>
+
+  <resultMap id="DeviceCheckMap" type="com.cskaoyan.erp.bean.vo.DeviceCheckVo">
+    <id column="device_check_id" jdbcType="VARCHAR" property="deviceCheckId" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="device_check_date" jdbcType="TIMESTAMP" property="deviceCheckDate" />
+    <result column="device_check_emp_id" jdbcType="VARCHAR" property="deviceCheckEmpId" />
+    <result column="device_check_result" jdbcType="VARCHAR" property="deviceCheckResult" />
+    <result column="device_check_fault_id" jdbcType="VARCHAR" property="deviceCheckFaultId" />
+    <association property="deviceCheckEmp" column="device_check_emp_id" select="com.cskaoyan.erp.mapper.EmployeeMapper.getEmp"></association>
+    <association property="deviceName" column="device_id" select="com.cskaoyan.erp.mapper.DeviceMapper.getDeviceName"></association>
+  </resultMap>
+
+  <resultMap id="deviceCheckConditionMap" type="com.cskaoyan.erp.bean.vo.DeviceCheckVo">
+    <id column="device_check_id" jdbcType="VARCHAR" property="deviceCheckId" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="device_check_date" jdbcType="TIMESTAMP" property="deviceCheckDate" />
+    <result column="device_check_emp_id" jdbcType="VARCHAR" property="deviceCheckEmpId" />
+    <result column="device_check_result" jdbcType="VARCHAR" property="deviceCheckResult" />
+    <result column="device_check_fault_id" jdbcType="VARCHAR" property="deviceCheckFaultId" />
+    <result property="deviceName" column="device_name"/>
+    <association property="deviceCheckEmp" column="device_check_emp_id" select="com.cskaoyan.erp.mapper.EmployeeMapper.getEmp"></association>
+  </resultMap>
+
+  <select id="findPageByCondition" resultMap="deviceCheckConditionMap">
+    select device_check_id, d.device_id, device_check_emp_id, device_check_date, device_check_result,
+    device_check_fault_id ,device_name from device d
+    left join device_check dc
+    on d.device_id=dc.device_id
+    <where>
+      <if test="deviceCheck!=null">
+        <if test="deviceCheck.deviceCheckId!=null and deviceCheck.deviceCheckId!=''">
+          and device_check_id like "%"#{deviceCheck.deviceCheckId}"%"
+        </if>
+        <if test="deviceCheck.deviceName!=null and deviceCheck.deviceName!=''">
+          and device_name like "%"#{deviceCheck.deviceName}"%"
+        </if>
+      </if>
+      limit #{limit} offset #{offset}
+    </where>
+  </select>
+
+  <select id="getConditionCount" resultType="integer">
+    select count(*) from device d
+    left join device_check dc
+    on d.device_id=dc.device_id
+    <where>
+      <if test="deviceCheck!=null">
+        <if test="deviceCheck.deviceCheckId!=null and deviceCheck.deviceCheckId!=''">
+          and device_check_id like "%"#{deviceCheck.deviceCheckId}"%"
+        </if>
+        <if test="deviceCheck.deviceName!=null and deviceCheck.deviceName!=''">
+          and device_name like "%"#{deviceCheck.deviceName}"%"
+        </if>
+      </if>
+    </where>
+  </select>
+
+
+
   <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.DeviceCheck">
     <id column="device_check_id" jdbcType="VARCHAR" property="deviceCheckId" />
     <result column="device_id" jdbcType="VARCHAR" property="deviceId" />

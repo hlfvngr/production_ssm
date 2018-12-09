@@ -42,13 +42,7 @@ public class Device {
         this.deviceName = deviceName == null ? null : deviceName.trim();
     }
 
-    public String getDeviceTypeId() {
-        return deviceTypeId;
-    }
 
-    public void setDeviceTypeId(String deviceTypeId) {
-        this.deviceTypeId = deviceTypeId == null ? null : deviceTypeId.trim();
-    }
 
     public String getDeviceStatusId() {
         return deviceStatusId;
@@ -98,12 +92,20 @@ public class Device {
         this.deviceServiceLife = deviceServiceLife;
     }
 
+    public String getDeviceTypeId() {
+        return deviceTypeId;
+    }
+
+    public void setDeviceTypeId(String deviceTypeId) {
+        this.deviceTypeId = deviceTypeId;
+    }
+
     public String getDeviceKeeperId() {
         return deviceKeeperId;
     }
 
     public void setDeviceKeeperId(String deviceKeeperId) {
-        this.deviceKeeperId = deviceKeeperId == null ? null : deviceKeeperId.trim();
+        this.deviceKeeperId = deviceKeeperId;
     }
 
     public String getNote() {

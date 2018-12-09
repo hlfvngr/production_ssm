@@ -39,7 +39,7 @@ public class DeviceMaintain {
     }
 
     public void setDeviceMaintainEmpId(String deviceMaintainEmpId) {
-        this.deviceMaintainEmpId = deviceMaintainEmpId == null ? null : deviceMaintainEmpId.trim();
+        this.deviceMaintainEmpId = deviceMaintainEmpId;
     }
 
     public Date getDeviceMaintainDate() {
