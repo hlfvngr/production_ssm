@@ -13,6 +13,11 @@
     product_id, product_name, product_type, image, note, status
   </sql>
   <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Product">
+   <sql id="Base_Column_List">
+    product_id, product_name, product_type, image, note, `status`
+  </sql>
+
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.Product">
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productId != null">
@@ -55,7 +60,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Product">
+
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Product">
     update product
     <set>
       <if test="productName != null">
@@ -141,4 +147,52 @@
       </if>
     </trim>
   </insert>-->
+
+  <select id="selectAllProduct" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List"/> from product;
+  </select>
+
+  <select id="count" resultType="_int">
+       select count(*) from product
+       <where>
+         <if test="productId != null and productId != ''">
+           and product_id like #{productId}
+         </if>
+         <if test="productName != null and productName != ''">
+           and product_name like "%"#{productName}"%"
+         </if>
+         <if test="productType != null and productType != ''">
+           and product_type like "%"#{productType}"%"
+         </if>
+       </where>
+  </select>
+
+  <select id="selectByPage"  resultMap="BaseResultMap">
+       select <include refid="Base_Column_List"/> from product
+    <where>
+      <if test="productId != null and productId != ''">
+        and product_id like #{productId}
+      </if>
+      <if test="productName != null and productName != ''">
+        and product_name like "%"#{productName}"%"
+      </if>
+      <if test="productType != null and productType != ''">
+        and product_type like "%"#{productType}"%"
+      </if>
+    </where>
+       limit #{limit} offset #{offset};
+  </select>
+
+  <select id="selectProductByName" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List"/>from product where product_name = #{productName};
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from product where product_id = #{productId};
+  </select>
+  <!--<select id="selectByPrimaryKey" resultType="com.cskaoyan.erp.bean.Product">
+    select
+     product_id as productId, product_name as productName, product_type as productType, image, note, `status`
+     from product where product_id = #{productId};
+  </select>-->
 </mapper>

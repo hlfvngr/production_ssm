@@ -6,6 +6,9 @@ public class Task {
     private String manufactureSn;
 
     private String workId;
+    private Manufacture manufacture;
+
+    private Work work;
 
     private Integer taskQuantity;
 
@@ -16,7 +19,7 @@ public class Task {
     }
 
     public void setTaskId(String taskId) {
-        this.taskId = taskId == null ? null : taskId.trim();
+        this.taskId = taskId;
     }
 
     public String getManufactureSn() {
@@ -24,7 +27,7 @@ public class Task {
     }
 
     public void setManufactureSn(String manufactureSn) {
-        this.manufactureSn = manufactureSn == null ? null : manufactureSn.trim();
+        this.manufactureSn = manufactureSn;
     }
 
     public String getWorkId() {
@@ -32,7 +35,23 @@ public class Task {
     }
 
     public void setWorkId(String workId) {
-        this.workId = workId == null ? null : workId.trim();
+        this.workId = workId;
+    }
+
+    public Manufacture getManufacture() {
+        return manufacture;
+    }
+
+    public void setManufacture(Manufacture manufacture) {
+        this.manufacture = manufacture;
+    }
+
+    public Work getWork() {
+        return work;
+    }
+
+    public void setWork(Work work) {
+        this.work = work;
     }
 
     public Integer getTaskQuantity() {

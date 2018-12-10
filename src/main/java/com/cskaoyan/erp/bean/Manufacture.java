@@ -5,9 +5,15 @@ import java.util.Date;
 public class Manufacture {
     private String manufactureSn;
 
+
     private String orderId;
 
     private String technologyId;
+
+    private Order order;
+
+    private Technology technology;
+
 
     private Integer launchQuantity;
 
@@ -20,7 +26,7 @@ public class Manufacture {
     }
 
     public void setManufactureSn(String manufactureSn) {
-        this.manufactureSn = manufactureSn == null ? null : manufactureSn.trim();
+        this.manufactureSn = manufactureSn;
     }
 
     public String getOrderId() {
@@ -28,7 +34,7 @@ public class Manufacture {
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+        this.orderId = orderId;
     }
 
     public String getTechnologyId() {
@@ -36,7 +42,23 @@ public class Manufacture {
     }
 
     public void setTechnologyId(String technologyId) {
-        this.technologyId = technologyId == null ? null : technologyId.trim();
+        this.technologyId = technologyId;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Technology getTechnology() {
+        return technology;
+    }
+
+    public void setTechnology(Technology technology) {
+        this.technology = technology;
     }
 
     public Integer getLaunchQuantity() {

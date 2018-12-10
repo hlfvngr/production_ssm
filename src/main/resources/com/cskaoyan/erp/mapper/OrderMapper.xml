@@ -3,8 +3,6 @@
 <mapper namespace="com.cskaoyan.erp.mapper.OrderMapper">
   <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Order">
     <id column="order_id" jdbcType="VARCHAR" property="orderId" />
-    <result column="custom_id" jdbcType="VARCHAR" property="customId" />
-    <result column="product_id" jdbcType="VARCHAR" property="productId" />
     <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
     <result column="request_date" jdbcType="TIMESTAMP" property="requestDate" />
     <result column="note" jdbcType="VARCHAR" property="note" />
@@ -14,11 +12,44 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="file" jdbcType="VARCHAR" property="file" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <association  property="orderCustom" javaType="com.cskaoyan.erp.bean.Customer">
+      <id column="custom_id" property="customId" />
+      <result column="custom_name"  property="customName" />
+      <result column="full_name"  property="fullName" />
+      <result column="address"  property="address" />
+      <result column="fax"  property="fax" />
+      <result column="email"  property="email" />
+      <result column="owner_name"  property="ownerName" />
+      <result column="owner_tel" property="ownerTel" />
+      <result column="cStatus"  property="status" />
+      <result column="cNote" property="note" />
+    </association>
+    <association  property="orderProduct" javaType="com.cskaoyan.erp.bean.Product">
+      <id column="product_id" property="productId" />
+      <result column="product_name" property="productName" />
+      <result column="product_type" property="productType" />
+      <result column="pImage" property="image" />
+      <result column="pNote" property="note" />
+      <result column="pStatus" property="status" />
+    </association>
   </resultMap>
+
   <sql id="Base_Column_List">
     order_id, custom_id, product_id, order_date, request_date, note, quantity, unit_price, 
     unit, image, file, status
   </sql>
+
+  <insert id="insert">
+        insert into c_order (order_id, custom_id, product_id, order_date,request_date, note,
+        quantity, unit_price, unit, image, file, status)
+        values (#{orderId}, #{orderCustom.customId},
+        #{orderProduct.productId}, #{orderDate},
+        #{requestDate}, #{note},
+        #{quantity}, #{unitPrice},
+        #{unit}, #{image}, #{file},
+        #{status})
+  </insert>
+
   <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Order">
     insert into c_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -98,14 +129,15 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Order">
+
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Order">
     update c_order
     <set>
-      <if test="customId != null">
-        custom_id = #{customId,jdbcType=VARCHAR},
+      <if test="orderCustom != null">
+        custom_id = #{orderCustom.customId,jdbcType=VARCHAR},
       </if>
-      <if test="productId != null">
-        product_id = #{productId,jdbcType=VARCHAR},
+      <if test="orderProduct != null">
+        product_id = #{orderProduct.productId,jdbcType=VARCHAR},
       </if>
       <if test="orderDate != null">
         order_date = #{orderDate,jdbcType=TIMESTAMP},
@@ -137,4 +169,55 @@
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
+
+  <select id="count" resultType="_int">
+      select count(*) from c_order
+    <where>
+          <if test="orderId != null">
+            and order_id like #{orderId,jdbcType=VARCHAR}
+          </if>
+          <if test="orderCustom != null">
+            and custom_id like #{orderCustom.customId,jdbcType=VARCHAR}
+          </if>
+          <if test="orderProduct != null">
+            and product_id like #{orderProduct.productId,jdbcType=VARCHAR}
+          </if>
+    </where>
+  </select>
+
+  <sql id="join">
+       o.order_id, o.custom_id, o.product_id, o.order_date, o.request_date, o.note, o.quantity,
+      o.unit_price, o.unit, o.image, o.file, o.`status` ,
+      cus.custom_id, cus.custom_name, cus.full_name, cus.address,
+      cus.fax, cus.email, cus.owner_name, cus.owner_tel, cus.`status` as cStatus, cus.note as cNote,
+      p.product_id, p.product_name, p.product_type, p.image as pImage, p.`status` as pStatus, p.note as pNote
+      from c_order o left join custom cus on o.custom_id = cus.custom_id
+      left join product p on o.product_id = p.product_id
+  </sql>
+
+ <!-- 连接查询-->
+  <select id="selectByPage" resultMap="BaseResultMap">
+      select <include refid="join"/>
+    <where>
+      <if test="orderId != null and orderId!=''">
+        and o.order_id like #{orderId,jdbcType=VARCHAR}
+      </if>
+      <if test="orderCustom != null">
+        and o.custom_id like #{orderCustom.customId,jdbcType=VARCHAR}
+      </if>
+      <if test="orderProduct != null">
+        and o.product_id like #{orderProduct.productId,jdbcType=VARCHAR}
+      </if>
+    </where>
+      limit #{limit} offset #{offset};
+  </select>
+
+   <select id="findAllOrder" resultMap="BaseResultMap">
+      select <include refid="join"/>;
+   </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+  select <include refid="join"/> where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

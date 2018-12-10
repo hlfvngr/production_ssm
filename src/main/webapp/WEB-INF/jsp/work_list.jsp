@@ -20,6 +20,7 @@
 
 <div  id="toolbar_work" style=" height: 22px; padding: 3px 11px; background: #fafafa;">  
 	
+<<<<<<< HEAD
 	<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
 		<c:if test="${per=='work:add' }" >
 		    <div style="float: left;">  
@@ -37,6 +38,25 @@
 		    </div>  
 		</c:if>
 	</c:forEach>
+=======
+	<%--<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
+		<c:if test="${per=='work:add' }" >--%>
+		    <div style="float: left;">  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="work_add()">新增</a>  
+		    </div>  
+		<%--</c:if>
+		<c:if test="${per=='work:edit' }" >--%>
+		    <div style="float: left;">  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="work_edit()">编辑</a>  
+		    </div>  
+		<%--</c:if>
+		<c:if test="${per=='work:delete' }" >--%>
+		    <div style="float: left;">  
+		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="work_delete()">删除</a>  
+		    </div>  
+		<%--</c:if>
+	</c:forEach>--%>
+>>>>>>> f9dbba4371aaf7619ff88a1f859eeeb2c97ebd01
 	
 	<div class="datagrid-btn-separator"></div>  
 	

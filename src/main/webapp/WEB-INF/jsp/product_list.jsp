@@ -33,29 +33,49 @@
 
 <div  id="toolbar_product" style=" height: 22px; padding: 3px 11px; background: #fafafa;">  
 	
+<<<<<<< HEAD
 	<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
 		<c:if test="${per=='product:add' }" >
+=======
+	<%--<c:forEach items="${sessionScope.sysPermissionList}" var="per" >
+		<c:if test="${per=='product:add' }" >--%>
+>>>>>>> f9dbba4371aaf7619ff88a1f859eeeb2c97ebd01
 		    <div style="float: left;">  
 		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" onclick="product_add()">
 					新增
 				</a>
 		    </div>  
+<<<<<<< HEAD
 		</c:if>
 		<c:if test="${per=='product:edit' }" >
+=======
+	<%--	</c:if>
+		<c:if test="${per=='product:edit' }" >--%>
+>>>>>>> f9dbba4371aaf7619ff88a1f859eeeb2c97ebd01
 		    <div style="float: left;">  
 		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="product_edit()">
 					编辑
 				</a>
 		    </div>  
+<<<<<<< HEAD
 		</c:if>
 		<c:if test="${per=='product:delete' }" >
+=======
+		<%--</c:if>
+		<c:if test="${per=='product:delete' }" >--%>
+>>>>>>> f9dbba4371aaf7619ff88a1f859eeeb2c97ebd01
 		    <div style="float: left;">  
 		        <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel" onclick="product_delete()">
 					删除
 				</a>
 		    </div>  
+<<<<<<< HEAD
 		</c:if>
 	</c:forEach>
+=======
+        <%--</c:if>
+	</c:forEach>--%>
+>>>>>>> f9dbba4371aaf7619ff88a1f859eeeb2c97ebd01
 	
 	<div class="datagrid-btn-separator"></div>  
 	

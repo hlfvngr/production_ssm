@@ -10,6 +10,11 @@ public class Work {
     private String processId;
 
     private String deviceId;
+    private Product workProduct;
+
+    private Process workProcess;
+
+    private Device workDevice;
 
     private Integer rating;
 
@@ -18,7 +23,7 @@ public class Work {
     }
 
     public void setWorkId(String workId) {
-        this.workId = workId == null ? null : workId.trim();
+        this.workId = workId;
     }
 
     public String getProcessNumber() {
@@ -26,7 +31,7 @@ public class Work {
     }
 
     public void setProcessNumber(String processNumber) {
-        this.processNumber = processNumber == null ? null : processNumber.trim();
+        this.processNumber = processNumber;
     }
 
     public String getProductId() {
@@ -34,7 +39,7 @@ public class Work {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+        this.productId = productId;
     }
 
     public String getProcessId() {
@@ -42,7 +47,7 @@ public class Work {
     }
 
     public void setProcessId(String processId) {
-        this.processId = processId == null ? null : processId.trim();
+        this.processId = processId;
     }
 
     public String getDeviceId() {
@@ -50,7 +55,31 @@ public class Work {
     }
 
     public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId == null ? null : deviceId.trim();
+        this.deviceId = deviceId;
+    }
+
+    public Product getWorkProduct() {
+        return workProduct;
+    }
+
+    public void setWorkProduct(Product workProduct) {
+        this.workProduct = workProduct;
+    }
+
+    public Process getWorkProcess() {
+        return workProcess;
+    }
+
+    public void setWorkProcess(Process workProcess) {
+        this.workProcess = workProcess;
+    }
+
+    public Device getWorkDevice() {
+        return workDevice;
+    }
+
+    public void setWorkDevice(Device workDevice) {
+        this.workDevice = workDevice;
     }
 
     public Integer getRating() {

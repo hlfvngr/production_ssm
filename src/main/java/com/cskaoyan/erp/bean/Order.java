@@ -6,9 +6,15 @@ import java.util.Date;
 public class Order {
     private String orderId;
 
+
     private String customId;
 
     private String productId;
+
+    private Customer orderCustom;
+
+    private Product orderProduct;
+
 
     private Date orderDate;
 
@@ -33,7 +39,7 @@ public class Order {
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+        this.orderId = orderId;
     }
 
     public String getCustomId() {
@@ -41,7 +47,7 @@ public class Order {
     }
 
     public void setCustomId(String customId) {
-        this.customId = customId == null ? null : customId.trim();
+        this.customId = customId;
     }
 
     public String getProductId() {
@@ -49,7 +55,23 @@ public class Order {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+        this.productId = productId;
+    }
+
+    public Customer getOrderCustom() {
+        return orderCustom;
+    }
+
+    public void setOrderCustom(Customer orderCustom) {
+        this.orderCustom = orderCustom;
+    }
+
+    public Product getOrderProduct() {
+        return orderProduct;
+    }
+
+    public void setOrderProduct(Product orderProduct) {
+        this.orderProduct = orderProduct;
     }
 
     public Date getOrderDate() {
@@ -73,7 +95,7 @@ public class Order {
     }
 
     public void setNote(String note) {
-        this.note = note == null ? null : note.trim();
+        this.note = note;
     }
 
     public Integer getQuantity() {
@@ -97,7 +119,7 @@ public class Order {
     }
 
     public void setUnit(String unit) {
-        this.unit = unit == null ? null : unit.trim();
+        this.unit = unit;
     }
 
     public String getImage() {
@@ -105,7 +127,7 @@ public class Order {
     }
 
     public void setImage(String image) {
-        this.image = image == null ? null : image.trim();
+        this.image = image;
     }
 
     public String getFile() {
@@ -113,7 +135,7 @@ public class Order {
     }
 
     public void setFile(String file) {
-        this.file = file == null ? null : file.trim();
+        this.file = file;
     }
 
     public Integer getStatus() {
