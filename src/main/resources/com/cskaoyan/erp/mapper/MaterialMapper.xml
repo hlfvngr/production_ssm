@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.erp.mapper.MaterialMapper">
+  <resultMap id="materialResultMap" type="com.cskaoyan.erp.bean.Material">
+    <id column="material_id" jdbcType="VARCHAR" property="materialId" />
+    <result column="material_type" jdbcType="VARCHAR" property="materialType" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remaining" jdbcType="INTEGER" property="remaining" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_id, material_type, status, remaining, note
+  </sql>
+  <!--1、增-->
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.Material">
+    insert into material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="materialType != null">
+        material_type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remaining != null">
+        remaining,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialId != null">
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialType != null">
+        #{materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remaining != null">
+        #{remaining,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <!--2、改-->
+  <update id="updateByMaterialId" parameterType="com.cskaoyan.erp.bean.Material">
+    update material
+    <set>
+      <if test="materialType != null">
+        material_type = #{materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remaining != null">
+        remaining = #{remaining,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where material_id = #{materialId,jdbcType=VARCHAR}
+  </update>
+
+  <!--3、查-->
+  <select id="count" resultType="_int">
+    select count(*) from material
+    <where>
+      <if test="params.material!=null and params.material.materialId != null and params.material.materialId != ''">
+        and material_id like "%"#{params.material.materialId}"%"
+      </if>
+      <if test="params.material!=null and params.material.materialType!=null and params.material.materialType != ''">
+        and material_type like "%"#{params.material.materialType}"%"
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByMaterialId" resultMap="materialResultMap">
+    select * from material where material_id = #{materialId,jdbcType=VARCHAR}
+  </select>
+
+  <!--包括多条件查询-->
+  <select id="selectMaterials" resultMap="materialResultMap">
+    select * from material
+    <where>
+      <if test="params.material!=null and params.material.materialId != null and params.material.materialId != ''">
+        and material_id like "%"#{params.material.materialId}"%"
+      </if>
+      <if test="params.material!=null and params.material.materialType!=null and params.material.materialType != ''">
+        and material_type like "%"#{params.material.materialType}"%"
+      </if>
+    </where>
+    <if test="params.rows!=null and params.limitParam!=null">
+      limit #{params.rows}
+      offset #{params.limitParam}
+    </if>
+  </select>
+
+  <!--4、删-->
+  <delete id="deleteByMaterialId">
+        delete from material where material_id = #{materialId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.erp.mapper.MaterialReceiveMapper">
+  <resultMap id="materialReceiveResultMap" type="com.cskaoyan.erp.bean.MaterialReceive">
+    <id column="receive_id" jdbcType="VARCHAR" property="receiveId" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="receive_date" jdbcType="TIMESTAMP" property="receiveDate" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <collection property="material" ofType="com.cskaoyan.erp.bean.Material">
+         <id column="material_id" jdbcType="VARCHAR" property="materialId" />
+         <result column="material_type" jdbcType="VARCHAR" property="materialType" />
+         <result column="status" jdbcType="VARCHAR" property="status" />
+         <result column="remaining" jdbcType="INTEGER" property="remaining" />
+         <result column="note" jdbcType="VARCHAR" property="note" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    receive_id, material_id, amount, receive_date, sender, receiver, note
+  </sql>
+
+  <!--1、增-->
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.MaterialReceive">
+    insert into material_receive
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receiveId != null">
+        receive_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="receiveDate != null">
+        receive_date,
+      </if>
+      <if test="sender != null">
+        sender,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receiveId != null">
+        #{receiveId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="receiveDate != null">
+        #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sender != null">
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <!--2、改-->
+  <update id="updateByReceiveId" parameterType="com.cskaoyan.erp.bean.MaterialReceive">
+    update material_receive
+    <set>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="receiveDate != null">
+        receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sender != null">
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where receive_id = #{receiveId,jdbcType=VARCHAR}
+  </update>
+
+  <!--3、删-->
+  <delete id="deleteByReceiveId">
+        delete from material_receive where receive_id = #{receiveId,jdbcType=VARCHAR}
+    </delete>
+
+
+  <!--4、查-->
+  <select id="selectMaterialReceives" resultMap="materialReceiveResultMap">
+    select *
+    from material_receive receive
+    LEFT JOIN material m ON receive.material_id=m.material_id
+    <where>
+      <if test="params.materialReceive!=null and params.materialReceive.receiveId != null and params.materialReceive.receiveId != ''">
+        and receive.receive_id like "%"#{params.materialReceive.receiveId}"%"
+      </if>
+      <if test="params.materialReceive!=null and params.materialReceive.materialId!=null and params.materialReceive.materialId != ''">
+        and receive.material_id like "%"#{params.materialReceive.materialId}"%"
+      </if>
+    </where>
+    limit #{params.rows}
+    offset #{params.limitParam}
+  </select>
+
+  <select id="selectByReceiveId" resultMap="materialReceiveResultMap">
+    select *
+    from material_receive receive
+    LEFT JOIN material m ON receive.material_id=m.material_id
+    where receive.receive_id = #{receiveId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="count" resultType="_int">
+    select count(*)
+    from material_receive receive
+    LEFT JOIN material m ON receive.material_id=m.material_id
+    <where>
+      <if test="params.materialReceive!=null and params.materialReceive.receiveId != null and params.materialReceive.receiveId != ''">
+        and receive.receive_id like "%"#{params.materialReceive.receiveId}"%"
+      </if>
+      <if test="params.materialReceive!=null and params.materialReceive.materialId!=null and params.materialReceive.materialId != ''">
+        and receive.material_id like "%"#{params.materialReceive.materialId}"%"
+      </if>
+    </where>
+  </select>
+</mapper>

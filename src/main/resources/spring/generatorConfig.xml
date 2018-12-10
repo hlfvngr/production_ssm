@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+         <!--这里在导入Generator类的时候要小心上面的字段会被更改-->
+<generatorConfiguration>
+
+    <context id="testTables" targetRuntime="MyBatis3">
+   <!-- 可以用于加载配置项或者配置文件，在整个配置文件中就可以使用${propertyKey}的方式来引用配置项
+   resource：配置资源加载地址，使用resource，MBG从classpath开始找，比如com/myproject/generatorConfig.properties
+   url：配置资源加载地质，使用URL的方式，比如file:///C:/myfolder/generatorConfig.properties.
+   注意，两个属性只能选址一个;
+
+   另外，如果使用了mybatis-generator-maven-plugin，那么在pom.xml中定义的properties都可以直接在generatorConfig.xml中使用
+   <properties resource="" url="" />
+   -->
+
+
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/production_ssm?serverTimezone=GMT"
+                        userId="root"
+                        password="7697380zydi">
+        <!-- 这里面可以设置property属性，每一个property属性都设置到配置的Driver上 -->
+        </jdbcConnection>
+
+        <!-- for oracle-->
+        <!--<jdbcConnection driverClass="oracle.jdbc.OracleDriver"
+            connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:yycg"
+            userId="yycg"
+            password="yycg">
+        </jdbcConnection>-->
+
+        <!-- 默认false，
+            为false把JDBC DECIMAL 和 NUMERIC 类型解析为Integer，
+            为 true把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal -->
+        <!--<javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>-->
+
+        <!-- javaModelGenerator javaBean生成的配置信息
+             targetProject:生成PO类的位置
+             targetPackage：生成PO类的类名-->
+        <javaModelGenerator targetPackage="reverseEngineering.bean"
+                            targetProject=".\src">
+            <!-- enableSubPackages:是否允许子包,是否让schema作为包的后缀
+                 即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="true" /><!--这里不太懂-->
+            <!-- 从数据库返回的值是否清理前后的空格 -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+
+        <!--sqlMapGenerator Mapper映射文件的配置信息
+            targetProject:mapper映射文件生成的位置
+            targetPackage:生成mapper映射文件放在哪个包下-->
+        <sqlMapGenerator targetPackage="reverseEngineering.mapper"
+                         targetProject=".\src">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!--
+           javaClientGenerator 生成 Model对象(JavaBean)和 mapper XML配置文件 对应的Dao代码
+           targetProject:mapper接口生成的位置
+           targetPackage:生成mapper接口放在哪个包下
+        -->
+        <!--type：选择怎么生成mapper接口（在MyBatis3/MyBatis3Simple下）：
+        1，ANNOTATEDMAPPER：会生成使用Mapper接口+Annotation的方式创建（SQL生成在annotation中），不会生成对应的XML；
+        2，MIXEDMAPPER：使用混合配置，会生成Mapper接口，并适当添加合适的Annotation，但是XML会生成在XML中；
+        3，XMLMAPPER：会生成Mapper接口，接口完全依赖XML；
+        注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER-->
+        <javaClientGenerator type="MIXEDMAPPER"
+                             targetPackage="reverseEngineering.mapper"
+                             targetProject=".\src">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator><!---->
+        <!-- 指定数据库表 -->
+
+            <!-- 指定所有数据库表 -->
+            <!--<table tableName="%"
+                   enableCountByExample="false"
+                   enableUpdateByExample="false"
+                   enableDeleteByExample="false"
+                   enableSelectByExample="false"
+                   enableInsert="false"
+                   enableDeleteByPrimaryKey="true"
+                   enableSelectByPrimaryKey="true"
+                   selectByExampleQueryId="false" ></table>
+                   -->
+
+        <!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
+        <!--
+        1，schema：数据库的schema；
+        2，catalog：数据库的catalog；
+        3，alias：为数据表设置的别名，如果设置了alias，那么生成的所有的SELECT SQL语句中，列名会变成：alias_actualColumnName
+        4，domainObjectName：生成的domain类的名字，如果不设置，直接使用表名作为domain类的名字；
+        可以设置为somepck.domainName，那么会自动把domainName类再放到somepck包里面；
+        5，enableInsert（默认true）：指定是否生成insert语句；
+        6，enableSelectByPrimaryKey（默认true）：指定是否生成按照主键查询对象的语句（就是getById或get）；
+        7，enableSelectByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询语句；
+        8，enableUpdateByPrimaryKey（默认true）：指定是否生成按照主键修改对象的语句（即update)；
+        9，enableDeleteByPrimaryKey（默认true）：指定是否生成按照主键删除对象的语句（即delete）；
+        10，enableDeleteByExample（默认true）：MyBatis3Simple为false，指定是否生成动态删除语句；
+        11，enableCountByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询总条数语句（用于分页的总条数查询）；
+        12，enableUpdateByExample（默认true）：MyBatis3Simple为false，指定是否生成动态修改语句（只修改对象中不为空的属性）；
+        13，modelType：参考context元素的defaultModelType，相当于覆盖；
+        14，delimitIdentifiers：参考tableName的解释，注意，默认的delimitIdentifiers是双引号，如果类似MYSQL这样的数据库，
+        使用的是`（反引号，那么还需要设置context的beginningDelimiter和endingDelimiter属性）
+        15，delimitAllColumns：设置是否所有生成的SQL中的列名都使用标识符引起来。默认为false，delimitIdentifiers参考context的属性-->
+
+
+        <table  tableName="c_order"
+                enableCountByExample="false"
+                enableUpdateByExample="false"
+                enableDeleteByExample="false"
+                enableSelectByExample="false"
+                enableInsert="true"
+
+                enableUpdateByPrimaryKey="true"
+                enableDeleteByPrimaryKey="true"
+                enableSelectByPrimaryKey="true"
+                selectByExampleQueryId="false"
+                domainObjectName="Order"
+        > </table>
+
+        <table  tableName="custom"
+                   enableCountByExample="false"
+                   enableUpdateByExample="false"
+                   enableDeleteByExample="false"
+                   enableSelectByExample="false"
+                   enableInsert="true"
+
+                   enableUpdateByPrimaryKey="true"
+                   enableDeleteByPrimaryKey="true"
+                   enableSelectByPrimaryKey="true"
+                   selectByExampleQueryId="false"
+                   domainObjectName="Customer"
+               > </table>
+
+                <table tableName="department"
+                       enableCountByExample="false"
+                       enableUpdateByExample="false"
+                       enableDeleteByExample="false"
+                       enableSelectByExample="false"
+                       enableInsert="true"
+
+                       enableUpdateByPrimaryKey="true"
+                       enableDeleteByPrimaryKey="true"
+                       enableSelectByPrimaryKey="true"
+                       selectByExampleQueryId="false"
+                       domainObjectName="Department"> </table>
+
+
+        <table tableName="device"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Device"> </table>
+
+        <table tableName="device_check"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="DeviceCheck"> </table>
+
+        <table tableName="device_fault"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="DeviceFault"> </table>
+
+        <table tableName="device_maintain"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="DeviceMaintain"> </table>
+
+        <table tableName="device_type"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="DeviceType"> </table>
+
+        <table tableName="employee"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Employee"> </table>
+
+        <table tableName="final_count_check"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="FinalCountCheck"> </table>
+
+        <table tableName="final_measuret_check"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="FinalMeasureCheck"> </table>
+
+        <table tableName="manufacture"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Manufacture"> </table>
+
+        <table tableName="material"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Material"> </table>
+
+
+        <table tableName="material_consume"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="MaterialConsume"> </table>
+
+        <table tableName="material_receive"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="MaterialReceive"> </table>
+
+
+        <table tableName="process"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Process"> </table>
+
+        <table tableName="process_count_check"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="ProcessCountCheck"> </table>
+
+        <table tableName="process_measure_check"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="ProcessMeasureCheck"> </table>
+
+        <table tableName="product"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Product"> </table>
+
+        <table tableName="task"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Task"> </table>
+
+        <table tableName="technology"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Technology"> </table>
+
+        <table tableName="technology_plan"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="TechnologyPlan"> </table>
+
+        <table tableName="technology_requirement"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="TechnologyRequirement"> </table>
+
+        <table tableName="unqualify_apply"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="UnqualifyApply"> </table>
+
+        <table tableName="work"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableInsert="true"
+
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="false"
+               domainObjectName="Work"> </table>
+        <!-- <table schema="" tableName="orders"></table>
+             <table schema="" tableName="items"></table>
+             <table schema="" tableName="orderdetail"></table>
+         -->
+               <!-- 有些表的字段需要指定java类型
+                <table schema="" tableName="">
+                <columnOverride column="" javaType="" />
+                </table> -->
+    </context>
+</generatorConfiguration>
